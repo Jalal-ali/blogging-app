@@ -9,6 +9,7 @@ import { addDoc, collection,
       query, 
       serverTimestamp } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
+import { Link } from "react-router-dom";
 
 
 const Dashboard = () => {
@@ -17,6 +18,8 @@ const Dashboard = () => {
     const descVal = useRef()
     const myObj = {}
     const [userCheck , setUserCheck] = useState(false)
+  const [hambrgr , setHambrgr] = useState(true)
+
 
 const saveData = async ()=> {
     try {
@@ -68,10 +71,50 @@ titleVal.current.value = null
 descVal.current.value = null
 }
 
+const showBrgr = () => {
+  hambrgr ? setHambrgr(false) : setHambrgr(true)
+}
+
   return (
     <>
+     {/* new nav  */}
+<nav className="shadow-lg shadow-blue-300/50 bg-black">
+    <div className="max-w-screen-xl flex flex-wrap place-content-end xl:place-content-center lg:place-content-center md:place-content-center  text-center xl:py-3 lg:py-4">
+    <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
+  
+        
+      <button onClick={showBrgr} id="hambrgr" data-collapse-toggle="navbar-cta" type="button" className="inline-flex items-center me-2 my-2 justify-center p-2 w-10 h-10 text-sm text-gray-500 rounded-lg md:hidden hover:bg-gray-100 focus:outline-none focus:ring-2 focus:ring-gray-200 dark:text-gray-400 dark:hover:bg-gray-700 dark:focus:ring-gray-600" aria-controls="navbar-cta" aria-expanded="false">
+          <span className="sr-only">Open main menu</span>
+          <svg className="w-5 h-5" aria-hidden="true" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 17 14">
+            <path stroke="currentColor" d="M1 1h15M1 7h15M1 13h15"/>
+          </svg>
+        </button>
+      </div> 
+      {hambrgr ? <div id="hdnli" className="align-middle items-center justify-center my-2 mx-3 w-full md:flex md:w-auto md:order-1" itemID="navbar-cta">
+        <ul className="flex flex-col align-middle font-semibold p-3 md:p-0 border border-[#36e6c2] rounded-lg  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 ">
+          <li>
+          <button type="button" ><Link className="block py-auto px-3 md:p-0 hover:text-[#001f3fc4] text-[#ADEFD1FF] duration-200 md:bg-transparent " to="/">Dashboard</Link></button>
+    
+          </li>
+          <li>
+          <button type="button" ><Link className="block py-2 px-3 md:p-0 hover:text-[#36e6c2] text-[#ADEFD1FF]" to="/myblogs">My Blogs</Link></button>
+          </li>
+          <li>
+          <button type="button" ><Link className="block py-2 px-3 md:p-0 hover:text-[#36e6c2] text-[#ADEFD1FF] rounded md:bg-transparent " to="/myblogs">My Blogs</Link></button>
+          </li>
+        </ul>
+      </div> : null}
+      
 
-    <div className="bg-zinc-300 min-h-screen max-h-full py-7">
+
+
+    </div>
+
+</nav>
+
+{/* ... */}
+
+    <div className="bg-zinc-50 min-h-screen max-h-full py-7">
         {userCheck ? <div className="text-center w-auto mx-auto  rounded-xl py-8 px-10">
 <form onSubmit={addBlog} className="bg-zinc-400 shadow-lg py-3 px-3 rounded-lg">
 
@@ -82,10 +125,33 @@ descVal.current.value = null
 </form>
     </div> : null}
     <h1 className="text-2xl text-center font-semibold pb-2">All Blogs</h1>
+  
     
     {blog.map((item , index)=>{
-        return <div key={index} className="bg-zinc-50 bg-opacity-40 shadow-lg my-2 border-b border-t border-slate-500 rounded-lg p-3 mx-12 text-left"> 
-        <h1 className="text-2xl font-semi-bold font-serif first-letter:uppercase">{item.Title}</h1> <p className="font-sans text-lg first-letter:uppercase text-gray-500">{item.Description}</p></div>
+        return <div key={index} className=" bg-gray-300 bg-opacity-50 shadow-lg my-4 border border-slate-500 border-opacity-30 rounded-lg p-3 py-auto mx-10  text-left"> 
+         <header>
+    <address className="flex items-center mb-6 not-italic">
+                  <div className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
+                      <img className="mr-4 w-16 h-16 rounded-full" src="https://flowbite.com/docs/images/people/profile-picture-2.jpg" alt="Jese Leos" />
+                      <div>
+                          <a href="#" rel="author" className="text-xl font-semibold text-gray-800">Jese Leos</a>
+                          <p className="text-base text-gray-600 ">Graphic Designer, educator & CEO Flowbite</p>
+                          <p className="text-base text-gray-600 "><time dateTime="2022-02-08" title="February 8th, 2022">Feb. 8, 2022</time></p>
+                      </div>
+              
+                  </div>
+              </address>
+              <article className="prose lg:prose-xl">
+  <h1 className="mb-4 text-3xl font-bold leading-tight text-gray-800 lg:mb-6 lg:text-4xl ">{item.Title}</h1>
+  <p className="lead font-sans text-gray-600">{item.Description}
+    For years parents have espoused the health benefits of eating garlic bread with cheese to their
+    children, with the food earning such an iconic status in our culture that kids will often dress
+    up as warm, cheesy loaf for Halloween.
+  </p>
+  
+</article>
+    </header>
+          </div>
     })}
     </div>
     </>
