@@ -1,23 +1,39 @@
 import { useForm } from "react-hook-form"
 import {
    signInWithPopup ,
-    GoogleAuthProvider} from "firebase/auth";
+    GoogleAuthProvider,
+    createUserWithEmailAndPassword} from "firebase/auth";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import { auth } from "../config";
 
  const Register = () => {
+  
+const [popup , setPopup] = useState(false);
+const [uid , setUid] = useState(null);
+const navigate = useNavigate();
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm()
-  const onSubmit = (data) => console.log(data)
 
-  const [popup , setPopup] = useState(false);
-const [uid , setUid] = useState(null);
-const navigate = useNavigate();
+  const onSubmit = (data) => {
+    createUserWithEmailAndPassword(auth, data.email, data.password)
+    .then(() => {
+  
+      navigate("/login")
+      // ...
+    })
+    .catch((error) => {
+      const errorCode = error.code;
+      const errorMessage = error.message;
+      alert(errorCode + errorMessage + "Something Went Wrong! Try Again. :]");
+      // ..
+    });
+  }
+
 
 
 
@@ -114,14 +130,14 @@ const googleLogin = ()=>{
           <form onSubmit={handleSubmit(onSubmit)} className="space-y-4 md:space-y-6">
           <div className="space-y-2">
       <label className="block mb-2 text-sm font-medium text-white dark:text-white" htmlFor="email">Email</label>
-      {errors.email ? <input {...register("email", { required: true })} className=" w-full text-base px-4 py-2 border-2  border-red-500 rounded-lg focus:outline-none focus:border-green-400" placeholder="mail@gmail.com" />
- :       <input {...register("email", { required: true })} className=" w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400" id="email" placeholder="mail@gmail.com" />}
+      {errors.email ? <input {...register("email", { required: true })} className=" w-full text-base px-4 py-2 border-2 text-black border-red-500 rounded-lg focus:outline-none focus:border-green-400" placeholder="mail@gmail.com" />
+ :       <input {...register("email", { required: true })} className=" w-full text-base px-4 py-2 border text-black border-gray-300 rounded-lg focus:outline-none focus:border-green-400" id="email" placeholder="mail@gmail.com" />}
       {errors.email && <span className="text-red-600 text-left">Email is required.</span>}
       </div>
       <div>
       <label className="z-auto block mb-2 font-medium text-white dark:text-white" htmlFor="password">Password</label>
       {errors.password ? <input type="password" {...register("password", { required: true })} className=" w-full text-base px-4 py-2 border-2  border-red-500 rounded-lg focus:outline-none focus:border-green-400" id="password"  placeholder="••••••••" />
-:       <input type="password" {...register("password", { required: true })} className=" w-full text-base px-4 py-2 border  border-gray-300 rounded-lg focus:outline-none focus:border-green-400" id="password"  placeholder="••••••••" />
+:       <input type="password" {...register("password", { required: true })} className=" w-full text-base px-4 py-2 border  border-gray-300 text-black rounded-lg focus:outline-none focus:border-green-400" id="password"  placeholder="••••••••" />
 }
       {errors.password && <span className="text-red-600 text-left">Password is required.</span>}
       </div>

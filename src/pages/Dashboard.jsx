@@ -3,10 +3,11 @@ import { useEffect, useRef, useState } from "react"
 // import { onAuthStateChanged } from "firebase/auth";
 // import { db , auth } from "./config";
 import { auth , db } from "../config";
-import { addDoc, collection, 
+import { addDoc, collection,
+    getDoc,
     getDocs,
     orderBy,
-      query, 
+      query,
       serverTimestamp } from "firebase/firestore";
 import { onAuthStateChanged } from "firebase/auth";
 import { Link } from "react-router-dom";
@@ -21,14 +22,27 @@ const Dashboard = () => {
   const [hambrgr , setHambrgr] = useState(true)
 
 
-const saveData = async ()=> {
+  const saveData = async ()=> {
+  
     try {
         const docRef = await addDoc(collection(db, "blogs"), {
         Title : myObj.Title,
         Description : myObj.Description,
-        postTime: serverTimestamp() ,
+        postTime: serverTimestamp() ,        
         uid: auth.currentUser.uid
       });  
+      const docSnap = await getDoc(docRef);
+
+      if (docSnap.exists()) {
+        const data = docSnap.data();
+        const postTime = data.postTime.toDate(); // Convert Firestore timestamp to JavaScript Date
+      
+        console.log("Post Time (Date format):", postTime);
+      } else {
+        console.log("No such document!");
+      }
+
+
       console.log(myObj.Title + " pushed " + "Document written with ID: ", docRef.id);
     } catch (e) {
       console.error("Error adding document: ", e);
@@ -38,10 +52,21 @@ const saveData = async ()=> {
  async function getData() {
     const q = query(collection(db, "blogs"),orderBy('postTime' , 'asc'))
     const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => { 
-            blog.push(doc.data())
+    querySnapshot.forEach((doc) => {  
+      const data = doc.data();
+      console.log(data);
+      
+      const postTimeDate = data.postTime.toDate();    
+      const formattedData = {
+        ...data,
+        postTime: postTimeDate, // Replace postTime with JS Date object
+      };
+      console.log();
+      
+      
+      blog.push(formattedData);
             setBlog([...blog])
-            console.log(blog);
+            console.log(blog); 
     });
   } //..getData func ended ..//
 
@@ -78,7 +103,7 @@ const showBrgr = () => {
   return (
     <>
      {/* new nav  */}
-<nav className="shadow-lg shadow-blue-300/50 bg-black">
+<nav className="shadow-lg shadow-blue-300/50 bg-gray-900 bg-opacity-20 border-b-2 border-teal-300">
     <div className="max-w-screen-xl flex flex-wrap place-content-end xl:place-content-center lg:place-content-center md:place-content-center  text-center xl:py-3 lg:py-4">
     <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
   
@@ -93,14 +118,14 @@ const showBrgr = () => {
       {hambrgr ? <div id="hdnli" className="align-middle items-center justify-center my-2 mx-3 w-full md:flex md:w-auto md:order-1" itemID="navbar-cta">
         <ul className="flex flex-col align-middle font-semibold p-3 md:p-0 border border-[#36e6c2] rounded-lg  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 ">
           <li>
-          <button type="button" ><Link className="block py-auto px-3 md:p-0 hover:text-[#001f3fc4] text-[#ADEFD1FF] duration-200 md:bg-transparent " to="/">Dashboard</Link></button>
+          <button type="button" ><Link className="block py-auto px-3 md:p-0 hover:text-teal-400  text-teal-400 duration-200 md:bg-transparent " to="/">Dashboard</Link></button>
     
           </li>
           <li>
-          <button type="button" ><Link className="block py-2 px-3 md:p-0 hover:text-[#36e6c2] text-[#ADEFD1FF]" to="/myblogs">My Blogs</Link></button>
+          <button type="button" ><Link className="block py-2 px-3 md:p-0 hover:text-teal-400 text-teal-200" to="/myblogs">My Blogs</Link></button>
           </li>
           <li>
-          <button type="button" ><Link className="block py-2 px-3 md:p-0 hover:text-[#36e6c2] text-[#ADEFD1FF] rounded md:bg-transparent " to="/myblogs">My Blogs</Link></button>
+          <button type="button" ><Link className="block py-2 px-3 md:p-0 hover:text-teal-400 text-teal-200 rounded md:bg-transparent " to="/myblogs">My Blogs</Link></button>
           </li>
         </ul>
       </div> : null}
@@ -121,14 +146,14 @@ const showBrgr = () => {
 <input ref={titleVal} type="text" placeholder="Place Holder." className="px-5 bg-gray-200 rounded" />
     {/* <label htmlFor="message" className="block mb-2 text-sm font-medium text-gray-900">Your message</label> */}
     <textarea ref={descVal} id="message" rows="4" className="my-3 block p-2.5 w-full text-sm text-gray-900 bg-gray-200 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500" placeholder="Your message..."></textarea>
-    <button type="submit" className="border border-indigo-600 shadow text-white p-2 rounded-lg bg-indigo-500">Publish</button>
+    <button type="submit" className="text-zinc-100 bg-gradient-to-br from-teal-400 via-teal-500 to-teal-400 hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-teal-300 dark:focus:ring-teal-800 font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2">Publish</button>
 </form>
     </div> : null}
     <h1 className="text-2xl text-center font-semibold pb-2">All Blogs</h1>
   
     
     {blog.map((item , index)=>{
-        return <div key={index} className=" bg-gray-300 bg-opacity-50 shadow-lg my-4 border border-slate-500 border-opacity-30 rounded-lg p-3 py-auto mx-10  text-left"> 
+        return <div key={index} className=" bg-gray-300 bg-opacity-60 shadow-lg my-4 border border-slate-500 border-opacity-30 rounded-lg p-3 py-auto mx-10  text-left"> 
          <header>
     <address className="flex items-center mb-6 not-italic">
                   <div className="inline-flex items-center mr-3 text-sm text-gray-900 dark:text-white">
@@ -136,7 +161,7 @@ const showBrgr = () => {
                       <div>
                           <a href="#" rel="author" className="text-xl font-semibold text-gray-800">Jese Leos</a>
                           <p className="text-base text-gray-600 ">Graphic Designer, educator & CEO Flowbite</p>
-                          <p className="text-base text-gray-600 "><time dateTime="2022-02-08" title="February 8th, 2022">Feb. 8, 2022</time></p>
+                          <p className=" text-gray-500 ">{item.postTime.toLocaleDateString(undefined, { year: 'numeric', month: 'long', day: 'numeric' })}</p>
                       </div>
               
                   </div>
@@ -150,6 +175,8 @@ const showBrgr = () => {
   </p>
   
 </article>
+<button className="my-3 "><Link className=" text-teal-500 hover:text-teal-400 font-semibold p-2">See all from this user</Link></button>
+
     </header>
           </div>
     })}

@@ -142,7 +142,7 @@ backgroundImage:
 "url(https://img.freepik.com/free-photo/studio-background-concept-dark-gradient-purple-studio-room-background-product_1258-53875.jpg)"
 }}
 >
-<div className="h-auto p-5 sm:flex sm:flex-row mx-auto justify-center">
+<div className="h-auto min-h-screen sm:flex sm:flex-row mx-auto p-5 justify-center">
 <div className="flex-col flex self-center p- sm:max-w-5xl xl:max-w-2xl z-10">
 <div className="self-start hidden lg:flex flex-col  text-white">
   <h1 className="mb-3 font-bold text-5xl">Hi ? Welcome !! </h1>

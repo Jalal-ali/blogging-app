@@ -47,8 +47,8 @@ const MyBlogs = () => {
   return (
     <>
      {/* new nav  */}
-<nav className="shadow-lg shadow-blue-300/50 bg-[#00203f]">
-    <div className="max-w-screen-xl flex flex-wrap place-content-end xl:place-content-center lg:place-content-center md:place-content-center  text-center xl:py-4 lg:py-4">
+     <nav className="shadow-lg shadow-blue-300/50 bg-black">
+    <div className="max-w-screen-xl flex flex-wrap place-content-end xl:place-content-center lg:place-content-center md:place-content-center  text-center xl:py-3 lg:py-4">
     <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
   
         
@@ -59,17 +59,17 @@ const MyBlogs = () => {
           </svg>
         </button>
       </div> 
-      {hambrgr ? <div id="hdnli" className="items-center justify-center mb-3 mx-3 w-full md:flex md:w-auto md:order-1" itemID="navbar-cta">
-        <ul className="flex flex-col font-semibold p-3 md:p-0 mt-2 border border-[#36e6c2] rounded-lg  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 ">
+      {hambrgr ? <div id="hdnli" className="align-middle items-center justify-center my-2 mx-3 w-full md:flex md:w-auto md:order-1" itemID="navbar-cta">
+        <ul className="flex flex-col align-middle font-semibold p-3 md:p-0 border border-[#36e6c2] rounded-lg  md:space-x-8 rtl:space-x-reverse md:flex-row md:mt-0 md:border-0 ">
           <li>
-          <button type="button" ><Link className="block py-auto px-3 md:p-0  hover:text-[#36e6c2] text-[#ADEFD1FF] duration-200 md:bg-transparent " to="/">Dashboard</Link></button>
+          <button type="button" ><Link className="block py-auto px-3 md:p-0 hover:text-teal-400 text-teal-200  duration-200 md:bg-transparent " to="/">Dashboard</Link></button>
     
           </li>
           <li>
-          <button type="button" ><Link className="block py-2 px-3 md:p-0 hover:text-[#36e6c2] text-[#36e6c2] " to="/myblogs">My Blogs</Link></button>
+          <button type="button" ><Link className="block py-1 px-3 md:p-0 // hover:text-teal-400  text-teal-400 duration-200" to="/myblogs">My Blogs</Link></button>
           </li>
           <li>
-          <button type="button" ><Link className="block py-2 px-3 md:p-0 hover:text-[#36e6c2] text-[#ADEFD1FF] rounded md:bg-transparent " to="/myblogs">My Blogs</Link></button>
+          <button type="button" ><Link className="block py-2 px-3 md:p-0 hover:text-teal-400 text-teal-200 rounded md:bg-transparent " to="/myblogs">My Blogs</Link></button>
           </li>
         </ul>
       </div> : null}
