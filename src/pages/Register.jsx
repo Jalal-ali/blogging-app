@@ -1,3 +1,4 @@
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 import { useForm } from "react-hook-form"
 import {
    signInWithPopup ,
@@ -5,25 +6,48 @@ import {
     createUserWithEmailAndPassword} from "firebase/auth";
 import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { auth } from "../config";
-
- const Register = () => {
+import { auth, storage } from "../config";
+const Register = () => {
   
-const [popup , setPopup] = useState(false);
+  
+
+
+
+   const [popup , setPopup] = useState(false);
 const [uid , setUid] = useState(null);
 const navigate = useNavigate();
+
+
+
 
   const {
     register,
     handleSubmit,
     formState: { errors },
   } = useForm()
-
-  const onSubmit = (data) => {
-    createUserWithEmailAndPassword(auth, data.email, data.password)
-    .then(() => {
   
-      navigate("/login")
+  const onSubmit = (data) => {
+  createUserWithEmailAndPassword(auth, data.email, data.password)
+    .then(() => {
+      // Handle file upload
+  if (!file) return;
+    
+        // Create a storage reference for the file
+        const storageRef = ref(storage, `users/${data.email}/${file.name}`)
+        const uploadTask = uploadBytesResumable(storageRef, file) 
+        uploadTask.then(() => {
+          // Get the download URL once the file is uploaded
+          getDownloadURL(storageRef).then((url) => {
+            setDownloadURL(url);
+            console.log("File available at", downloadURL);
+          });
+        }).catch((error) => {
+          console.error("Upload failed:", error);
+        });
+        
+  
+      navigate("/dashboard")
+
       // ...
     })
     .catch((error) => {
@@ -33,7 +57,17 @@ const navigate = useNavigate();
       // ..
     });
   }
+    //   profile work 
+    const [downloadURL, setDownloadURL] = useState("");
+    const [file, setFile] = useState(null);
+    // Handle file selection
+    const handleFileChange = (e) => {
+      if (e.target.files[0]) {
+        setFile(e.target.files[0]);
+    }
+};
 
+        // profile work ended 
 
 
 
@@ -111,7 +145,6 @@ const googleLogin = ()=>{
   </div>
 </div> : null }
 
-
     <div
   className="bg-no-repeat bg-cover text-white bg-center relative"
   style={{
@@ -179,6 +212,8 @@ const googleLogin = ()=>{
               Already have an account?{" "}
               <Link className="font-medium text-primary-400 hover:underline dark:text-primary-500" to={`/login`} >Login here</Link>
             </p>
+            {/* profile input  */}
+            <input type="file" onChange={handleFileChange} />
           </form>
           <div className="flex w-full items-center gap-2 py-1 text-sm text-slate-600">
             <div className="h-px w-full bg-slate-200" />

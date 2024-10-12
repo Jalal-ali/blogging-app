@@ -2,13 +2,13 @@ import { createRoot } from 'react-dom/client'
 // import App from './App.jsx'
 import './index.css'
 import { createBrowserRouter, RouterProvider } from 'react-router-dom'
-import App from './App.jsx'
 import Layout from './Layout.jsx'
 // import Signup from './pages/signup.jsx'
 import Login from './pages/Login.jsx'
 import Dashboard from './pages/Dashboard.jsx'
 import MyBlogs from './pages/MyBlogs.jsx'
 import Register from './pages/Register.jsx'
+import Profile from './pages/Profile.jsx'
 
 const router = createBrowserRouter([
   {
@@ -38,11 +38,11 @@ const router = createBrowserRouter([
       {
         path : "*" ,
         element : <h1>Not Found.</h1>
-      },
-      {
-        path : "app",
-        element : <App />
+      },{
+        path : "profile" ,
+        element : <Profile />
       }
+      
     ]
   }
 ])

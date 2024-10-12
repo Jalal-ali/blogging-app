@@ -1,53 +1,39 @@
-import { useEffect, useState } from "react"
-// import {  useEffect} from "react";
-// import { onAuthStateChanged } from "firebase/auth";
-// import { db , auth } from "./config";
-import { auth , db } from "../config";
-import { collection, 
-    getDocs,
-    orderBy,
-      query, } from "firebase/firestore";
+ import { auth} from "../config";
+import { useEffect, useState } from "react";
+import { Link, useNavigate } from "react-router-dom";
 import { onAuthStateChanged } from "firebase/auth";
-import { Link } from "react-router-dom";
-const MyBlogs = () => {
 
-    const [blog , setBlog] = useState([])
+
+const Profile = () => {
+const navigate = useNavigate()
+
+useEffect(()=>{
+        onAuthStateChanged(auth, (user) => {
+            if (user) {
+                console.log(auth.currentUser.uid);
+            
+          } else {     
+            navigate("/login")
+          }
+        });
+      } , [])
+
+
+
+
     const [hambrgr , setHambrgr] = useState(true)
+    const showBrgr = () => {
+        hambrgr ? setHambrgr(false) : setHambrgr(true)
+      }
 
 
-
-      //func getData from fire base
- async function getData() {
-
-    const q = query(collection(db, "blogs"),orderBy('postTime' , 'asc'))
-    const querySnapshot = await getDocs(q);
-    querySnapshot.forEach((doc) => { 
-        if(auth.currentUser.uid == doc.data().uid )        
-            blog.push(doc.data())
-            setBlog([...blog])
-            console.log(blog);
-    });
-  } //..getData func ended ..//
-
-  useEffect(() => {
-    onAuthStateChanged(auth, (user) =>{
-        if(user){
-            console.log("user hai");
-        }else{
-            console.log("user ni hai");            
-        }
-    })
-    getData()
-  } , [])
-  const showBrgr = () => {
-    hambrgr ? setHambrgr(false) : setHambrgr(true)
-  }
   
+  
+
 
   return (
     <>
-     {/* new nav  */}
-     <nav className="shadow-lg shadow-indigo-300 bg-zinc-900 ">
+    <nav className="shadow-lg shadow-indigo-300 bg-zinc-900 ">
     <div className="max-w-screen-xl flex flex-wrap place-content-end xl:place-content-center lg:place-content-center md:place-content-center  text-center xl:py-3 lg:py-4">
     <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
   
@@ -80,17 +66,28 @@ const MyBlogs = () => {
     </div>
 
 </nav>
-
 {/* ... */}
-      <div className="bg-zinc-300 min-h-screen max-h-full py-7">    
-    <h1 className="text-2xl text-center font-semibold pb-2">My Blogs</h1>
-    {blog.map((item , index)=>{
-        return <div key={index} className="bg-zinc-50 bg-opacity-40 shadow-lg my-2 border-b border-t border-slate-500 rounded-lg p-3 mx-12 text-left"> 
-        <h1 className="text-2xl font-semi-bold font-serif first-letter:uppercase">{item.Title}</h1> <p className="font-sans text-lg first-letter:uppercase text-gray-500">{item.Description}</p></div>
-    })}
+    <h1>Profile</h1>
+    <div>
+      <h2>Firebase File Upload</h2>
+      
+    
     </div>
+
     </>
+
   )
 }
 
-export default MyBlogs
+export default Profile
+
+
+
+
+
+
+
+
+  
+
+
