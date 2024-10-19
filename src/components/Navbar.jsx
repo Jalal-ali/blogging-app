@@ -42,7 +42,7 @@ const Navbar = () => {
     <nav className="shadow-lg shadow-indigo-300/50 bg-black">
     
     <div className="max-w-screen-xl flex  text-center justify-between mx-3 py-2">
-<p className=' my-3 text-teal-100 xl:text-xl cursor-pointer first-letter:uppercase text-md font-light text-center'>{email}</p>
+<p className=' my-3 text-[#ADEFD1FF] xl:text-xl cursor-pointer first-letter:uppercase text-md font-light text-center'>{email}</p>
 <div className='flex'>
 {/* <button type="button" ><Link className="text-white bg-gradient-to-b from-[#00203f] via-slate-700 to-[#00203f] hover:bg-gradient-to-br focus:ring-4 focus:outline-none focus:ring-[#001f3fcf] dark:focus:ring-[#001f3fb1] font-medium rounded-lg text-sm px-5 py-2.5 text-center me-2 mb-2" to="/dashboard">Home</Link></button> */}
           {sign ? <div>
