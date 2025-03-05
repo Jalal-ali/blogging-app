@@ -49,7 +49,6 @@ useEffect(() => {
 
 
   
-  // .toDate();    
   const saveData = async ()=> {
   
     try {
@@ -107,6 +106,7 @@ const showBrgr = () => {
   setHambrgr(!hambrgr)
 }
 
+const [isOpen, setIsOpen] = useState(false);
 
 
   return (
@@ -117,19 +117,51 @@ const showBrgr = () => {
     <div className="flex md:order-2 space-x-3 md:space-x-0 rtl:space-x-reverse">
   {/* new hamburger */}
   <button onClick={showBrgr} className="md:hidden relative group me-4">
-        <div className="relative flex flex-col overflow-hidden items-center justify-center rounded-lg my-2 w-[50px] h-[50px] transform transition-all bg-slate-30 ring-[#ADEFD1FF] hover:ring-2 group-focus:ring-2 ring-opacity-30 duration-200 shadow">
-          <div className="transform transition-all duration-150 overflow-hidden -translate-y-5 group-focus:translate-y-3">
-            <svg xmlns="http://www.w3.org/2000/svg" className="h-6 w-6 animate-bounce text-[#00203FFF]" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth="2">
-              <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
-            </svg>
-          </div>
+  <div
+      onClick={() => setIsOpen(!isOpen)}
+      className={`relative flex flex-col overflow-hidden items-center justify-center rounded-lg my-2 w-[50px] h-[50px] transform transition-all bg-slate-30 ring-slate-500 hover:ring-2 focus:ring-2 ring-opacity-30 duration-200 shadow cursor-pointer`}
+    >
+      {/* Arrow Icon */}
+      <div
+        className={`transform transition-all duration-150 overflow-hidden ${
+          isOpen ? "translate-y-3" : "-translate-y-5"
+        }`}
+      >
+        <svg
+          xmlns="http://www.w3.org/2000/svg"
+          className="h-6 w-6 animate-bounce text-[#00203FFF]"
+          fill="none"
+          viewBox="0 0 24 24"
+          stroke="currentColor"
+          strokeWidth="2"
+        >
+          <path strokeLinecap="round" strokeLinejoin="round" d="M5 15l7-7 7 7" />
+        </svg>
+      </div>
 
-          <div className="flex flex-col justify-between w-[20px] h-[20px] transform transition-all duration-300 origin-center overflow-hidden -translate-y-3">
-            <div className="bg-[#00203FFF] mb-1.5 h-[2px] w-7 transform transition-all duration-300 origin-left group-focus:translate-y-6"></div>
-            <div className="bg-[#00203FFF] mb-1.5 h-[2px] w-4 rounded transform transition-all duration-300 group-focus:translate-y-6 delay-75"></div>
-            <div className="bg-[#00203FFF] h-[2px] w-3 transform transition-all duration-300 origin-left group-focus:translate-y-6 delay-100"></div>
-          </div>
-        </div>
+      {/* Menu Bars */}
+      <div
+        className={`flex flex-col justify-between w-[20px] h-[20px] transform transition-all duration-300 origin-center overflow-hidden ${
+          isOpen ? "translate-y-6" : "-translate-y-3"
+        }`}
+      >
+        <div
+          className={`bg-[#00203FFF] mb-1.5 h-[2px] w-7 transform transition-all duration-300 origin-left ${
+            isOpen ? "translate-y-6" : ""
+          }`}
+        ></div>
+        <div
+          className={`bg-[#00203FFF] mb-1.5 h-[2px] w-4 rounded transform transition-all duration-300 ${
+            isOpen ? "translate-y-6 delay-75" : ""
+          }`}
+        ></div>
+        <div
+          className={`bg-[#00203FFF] h-[2px] w-3 transform transition-all duration-300 origin-left ${
+            isOpen ? "translate-y-6 delay-100" : ""
+          }`}
+        ></div>
+      </div>
+    </div>
       </button>
         {/* .... */}
       {/* <button  id="hambrgr" data-collapse-toggle="navbar-cta" type="button" className="inline-flex items-center me-4 justify-center my-1 w-10 h-10 text-sm text-[#00203FFF] rounded-lg  ring-slate-500 ring-1 hover:text-gray-500" aria-controls="navbar-cta" aria-expanded="false">

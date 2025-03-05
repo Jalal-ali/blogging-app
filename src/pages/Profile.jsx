@@ -1,23 +1,56 @@
- import { auth} from "../config";
+ import { auth, storage } from "../config";
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { onAuthStateChanged } from "firebase/auth";
+import { onAuthStateChanged } from "firebase/auth"; 
+import { getDownloadURL, ref, uploadBytesResumable } from "firebase/storage";
 
 
 const Profile = () => {
+
 const navigate = useNavigate()
+const [downloadURL, setDownloadURL] = useState("");
+const [file, setFile] = useState(null);
+
+const [email, setEmail] = useState(null);
 
 useEffect(()=>{
         onAuthStateChanged(auth, (user) => {
             if (user) {
                 console.log(auth.currentUser.uid);
-            
-          } else {     
+                setEmail(auth.currentUser.email);  
+              } else {     
             navigate("/login")
           }
         });
       } , [])
+      
+      //   profile work 
+      
+          // Handle file selection
+          const handleFileChange = (e) => {
+            if (e.target.files[0]) {
+              setFile(e.target.files[0]);
+          }
+      };
+      // profile work ended 
+  const onSubmit = (event) => {
+    event.preventDefault()
+    if (!email) return;
 
+    // if (!file) alert("Select file before submiting ");
+    // Create a storage reference for the file
+        const storageRef = ref(storage, `users/${email}/${file.name}`)
+        const uploadTask = uploadBytesResumable(storageRef, file) 
+        uploadTask.then(() => {
+          // Get the download URL once the file is uploaded
+          getDownloadURL(storageRef).then((url) => {
+            setDownloadURL(url);
+            console.log("File available at", downloadURL);
+          });
+        }).catch((error) => {
+          console.error("Upload failed:", error);
+        });
+      }
 
 
 
@@ -68,6 +101,12 @@ useEffect(()=>{
 </nav>
 {/* ... */}
     <h1>Profile</h1>
+    <form onSubmit={onSubmit}>
+    {/* profile input  */}
+    <input type="file" onChange={handleFileChange} />
+    <p>selected:{file}</p>
+    <button type="submit">submit</button>
+    </form>
     <div>
       <h2>Firebase File Upload</h2>
       
